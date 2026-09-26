@@ -1,58 +1,183 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Prompt Box API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Prompt Box API is the Laravel backend for **Prompt Box**, a digital-product application built on the Armin API foundation.
 
-## About Laravel
+It provides the API, authentication, authorization, catalog management, access control, orders, payments, subscriptions, and other backend services required by the Prompt Box product.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Role in Prompt Box
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Prompt Box consists of three independent applications:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* **Prompt Box API** — Laravel backend and source of truth for business rules and data.
+* **Prompt Box Admin** — React-based administrative interface.
+* **Prompt Box Web** — Next.js public-facing application.
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+```text
+                         Prompt Box
+                              │
+             ┌────────────────┼────────────────┐
+             │                │                │
+             ▼                ▼                ▼
+           API              Admin             Web
+         Laravel          React/Vite        Next.js
+             │                │                │
+             └────────────────┼────────────────┘
+                              │
+                        REST API Contract
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+The API is the authoritative backend. Admin and Web consume the API and do not own authoritative business rules.
 
-## Contributing
+## Technology
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+* Laravel 13
+* PHP 8.4
+* MySQL
+* Laravel Sanctum
+* REST API
+* Docker
+* Nginx
+* PHP-FPM
 
-## Code of Conduct
+The API is versioned under:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```text
+/api/v1
+```
 
-## Security Vulnerabilities
+## Core Responsibilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+The Prompt Box API provides backend capabilities for:
 
-## License
+* Authentication and user management
+* User and admin authorization
+* Prompt Box item catalog
+* Categories and tags
+* Media and files
+* Free and paid access
+* Orders and order items
+* Payments and payment gateways
+* ZarinPal integration
+* Subscription plans and subscriptions
+* Protected content access
+* Stable API resources and HTTP contracts
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Business-critical decisions remain on the backend, including:
+
+* Authorization
+* Access control
+* Pricing
+* Order state
+* Payment state
+* Subscription state
+* User entitlements
+* Protected content access
+
+Frontend applications consume these rules through the API.
+
+## Architecture
+
+Prompt Box API is based on the reusable Armin API architecture.
+
+The backend follows:
+
+* API First
+* Backend / Frontend Separation
+* Thin Controllers
+* Explicit Business Rules
+* Meaningful Services
+* Form Requests for meaningful validation
+* Reusable Components
+* Testable Code
+* Docker First
+* Stable API Contracts
+* Convention Over Configuration
+* Avoid Premature Abstraction
+
+Product-specific requirements belong in Prompt Box. Reusable architectural improvements should only be introduced into the Armin Template when they represent a genuine reusable requirement.
+
+## Development
+
+Start the Docker environment with:
+
+```bash
+docker compose up -d
+```
+
+Run the test suite with:
+
+```bash
+docker compose exec app php artisan test
+```
+
+The API is intended to be developed and tested inside the Docker environment.
+
+## Armin Foundation
+
+Prompt Box API was created from the stable **Armin API Template**.
+
+The reusable Armin foundation provides the technical architecture and common backend capabilities, while this repository represents the independent Prompt Box product instance.
+
+```text
+Armin API Template
+        ↓
+Prompt Box API
+        ↓
+Prompt Box production
+```
+
+The Prompt Box instance owns product-specific configuration, content, catalog data, domain configuration, and production credentials.
+
+## Payment Configuration
+
+Prompt Box uses the payment gateway infrastructure provided by the Armin API foundation, including ZarinPal integration.
+
+Real production payment credentials belong exclusively to the Prompt Box environment.
+
+Production secrets must never be committed to the repository.
+
+```text
+Armin Foundation
+    └── Payment gateway integration
+
+Prompt Box
+    └── Production payment credentials
+```
+
+## Documentation
+
+The repository also contains the Armin foundation documentation under:
+
+```text
+Armin Documentation/
+```
+
+Those documents describe the reusable architecture and boundaries inherited from the Armin Template.
+
+Prompt Box-specific product decisions and configuration belong to this repository and its product documentation.
+
+## Status
+
+**Productionization in Progress**
+
+The Prompt Box API is the backend instance being prepared for the Prompt Box product.
+
+The underlying Armin API foundation is complete and stable. Product-specific configuration, content, production settings, and deployment are handled separately in this repository.
+
+## Repository Structure
+
+```text
+prompt-box-api/
+│
+├── app/
+├── bootstrap/
+├── config/
+├── database/
+├── routes/
+├── tests/
+├── Armin Documentation/
+├── README.md
+└── ...
+```
+
+The API repository is the source of truth for Prompt Box backend implementation and product-specific backend configuration.
