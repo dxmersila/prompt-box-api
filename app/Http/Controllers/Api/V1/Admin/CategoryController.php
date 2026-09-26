@@ -10,7 +10,7 @@ use App\Http\Resources\AdminCategoryResource;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Str;
+use App\Support\SlugGenerator;
 use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends Controller
@@ -54,7 +54,7 @@ class CategoryController extends Controller
     ): JsonResponse {
         $data = $request->validated();
 
-        $data['slug'] = $data['slug'] ?? Str::slug($data['name']);
+        $data['slug'] = $data['slug'] ?? SlugGenerator::generate($data['name']);
 
         $category = Category::create($data);
 

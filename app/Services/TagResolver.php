@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Tag;
-use Illuminate\Support\Str;
+use App\Support\SlugGenerator;
 
 class TagResolver
 {
@@ -42,7 +42,7 @@ class TagResolver
 
     private function createTag(string $name): Tag
     {
-        $baseSlug = Str::slug($name);
+        $baseSlug = SlugGenerator::generate($name);
 
         if ($baseSlug === '') {
             $baseSlug = 'tag';

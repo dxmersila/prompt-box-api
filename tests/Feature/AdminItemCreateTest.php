@@ -87,6 +87,108 @@ class AdminItemCreateTest extends TestCase
         ]);
     }
 
+    public function test_admin_can_create_item_with_persian_tag_slug(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $response = $this
+            ->actingAs($admin, 'sanctum')
+            ->postJson('/api/v1/admin/items', [
+                'title' => 'Test Item',
+                'tags' => ['پرامپت حرفه‌ای'],
+            ]);
+
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('tags', [
+            'name' => 'پرامپت حرفه‌ای',
+            'slug' => 'پرامپت-حرفه‌ای',
+        ]);
+    }
+
+    public function test_admin_can_create_item_with_manual_slug_unchanged(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $response = $this
+            ->actingAs($admin, 'sanctum')
+            ->postJson('/api/v1/admin/items', [
+                'title' => 'راهنمای ساخت پرامپت',
+                'slug' => 'اسلاگ_یک',
+            ]);
+
+        $response
+            ->assertStatus(201)
+            ->assertJson([
+                'data' => [
+                    'title' => 'راهنمای ساخت پرامپت',
+                    'slug' => 'اسلاگ_یک',
+                ],
+            ]);
+
+        $this->assertDatabaseHas('items', [
+            'title' => 'راهنمای ساخت پرامپت',
+            'slug' => 'اسلاگ_یک',
+        ]);
+    }
+
+    public function test_admin_can_create_item_with_duplicate_persian_tag_slug(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        Tag::factory()->create([
+            'name' => 'Prompt',
+            'slug' => 'پرامپت',
+        ]);
+
+        $response = $this
+            ->actingAs($admin, 'sanctum')
+            ->postJson('/api/v1/admin/items', [
+                'title' => 'Test Item',
+                'tags' => ['پرامپت'],
+            ]);
+
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('tags', [
+            'name' => 'پرامپت',
+            'slug' => 'پرامپت-2',
+        ]);
+    }
+
+    public function test_admin_can_create_item_with_persian_auto_generated_slug(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $response = $this
+            ->actingAs($admin, 'sanctum')
+            ->postJson('/api/v1/admin/items', [
+                'title' => 'راهنمای ساخت پرامپت حرفه‌ای',
+            ]);
+
+        $response
+            ->assertStatus(201)
+            ->assertJson([
+                'data' => [
+                    'title' => 'راهنمای ساخت پرامپت حرفه‌ای',
+                    'slug' => 'راهنمای-ساخت-پرامپت-حرفه‌ای',
+                ],
+            ]);
+
+        $this->assertDatabaseHas('items', [
+            'title' => 'راهنمای ساخت پرامپت حرفه‌ای',
+            'slug' => 'راهنمای-ساخت-پرامپت-حرفه‌ای',
+        ]);
+    }
+
     public function test_admin_can_create_item(): void
     {
         $admin = User::factory()->create([

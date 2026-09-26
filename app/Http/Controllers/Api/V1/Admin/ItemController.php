@@ -15,7 +15,7 @@ use App\Services\TagResolver;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use App\Support\SlugGenerator;
 use Symfony\Component\HttpFoundation\Response;
 
 class ItemController extends Controller
@@ -94,7 +94,7 @@ class ItemController extends Controller
 
             $data = $request->validated();
 
-            $data['slug'] = $data['slug'] ?? Str::slug($data['title']);
+            $data['slug'] = $data['slug'] ?? SlugGenerator::generate($data['title']);
 
             $data['is_visible'] = $data['is_visible'] ?? false;
             $data['access_type'] = $data['access_type'] ?? 'free';

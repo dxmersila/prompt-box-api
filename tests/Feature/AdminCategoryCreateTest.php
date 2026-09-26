@@ -35,6 +35,33 @@ class AdminCategoryCreateTest extends TestCase
         $response->assertStatus(403);
     }
 
+    public function test_admin_can_create_category_with_persian_auto_generated_slug(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $response = $this
+            ->actingAs($admin, 'sanctum')
+            ->postJson('/api/v1/admin/categories', [
+                'name' => 'دسته‌بندی پرامپت حرفه‌ای',
+            ]);
+
+        $response
+            ->assertStatus(201)
+            ->assertJson([
+                'data' => [
+                    'name' => 'دسته‌بندی پرامپت حرفه‌ای',
+                    'slug' => 'دسته‌بندی-پرامپت-حرفه‌ای',
+                ],
+            ]);
+
+        $this->assertDatabaseHas('categories', [
+            'name' => 'دسته‌بندی پرامپت حرفه‌ای',
+            'slug' => 'دسته‌بندی-پرامپت-حرفه‌ای',
+        ]);
+    }
+
     public function test_admin_can_create_category(): void
     {
         $admin = User::factory()->create([
