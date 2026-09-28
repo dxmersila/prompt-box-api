@@ -4,10 +4,7 @@ use App\Services\FakePaymentGateway;
 use App\Services\ZarinpalPaymentGateway;
 
 return [
-    'web_app_url' => env(
-        'WEB_APP_URL',
-        'http://localhost:3000'
-    ),
+    'web_app_url' => config('app.web_app_url'),
 
     'gateway' => env('PAYMENT_GATEWAY', 'fake'),
 

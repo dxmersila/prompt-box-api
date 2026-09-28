@@ -30,6 +30,26 @@ Route::prefix('v1')->group(function () {
         Route::post('/register', [AuthController::class, 'register']);
         Route::post('/login', [AuthController::class, 'login'])
             ->middleware('throttle:login');
+
+        Route::get(
+            '/email/verify/{id}',
+            [AuthController::class, 'verifyEmail']
+        )->middleware('signed')->name('verification.verify');
+
+        Route::post(
+            '/email/verification-notification',
+            [AuthController::class, 'resendVerification']
+        )->middleware('throttle:6,1');
+
+        Route::post(
+            '/password/forgot',
+            [AuthController::class, 'forgotPassword']
+        )->middleware('throttle:6,1');
+
+        Route::post(
+            '/password/reset',
+            [AuthController::class, 'resetPassword']
+        )->middleware('throttle:6,1');
     });
 
     // Items
