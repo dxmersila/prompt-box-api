@@ -60,6 +60,58 @@ class ItemApiTest extends TestCase
             ]);
     }
 
+    public function test_items_endpoint_can_filter_by_free_access_type(): void
+    {
+        Item::factory()->create([
+            'title' => 'Free Item',
+            'access_type' => 'free',
+            'is_visible' => true,
+        ]);
+
+        Item::factory()->create([
+            'title' => 'Paid Item',
+            'access_type' => 'paid',
+            'is_visible' => true,
+        ]);
+
+        $response = $this->getJson('/api/v1/items?access_type=free');
+
+        $response
+            ->assertOk()
+            ->assertJsonFragment([
+                'title' => 'Free Item',
+            ])
+            ->assertJsonMissing([
+                'title' => 'Paid Item',
+            ]);
+    }
+
+    public function test_items_endpoint_can_filter_by_paid_access_type(): void
+    {
+        Item::factory()->create([
+            'title' => 'Free Item',
+            'access_type' => 'free',
+            'is_visible' => true,
+        ]);
+
+        Item::factory()->create([
+            'title' => 'Paid Item',
+            'access_type' => 'paid',
+            'is_visible' => true,
+        ]);
+
+        $response = $this->getJson('/api/v1/items?access_type=paid');
+
+        $response
+            ->assertOk()
+            ->assertJsonFragment([
+                'title' => 'Paid Item',
+            ])
+            ->assertJsonMissing([
+                'title' => 'Free Item',
+            ]);
+    }
+
     public function test_items_endpoint_can_sort_latest(): void
     {
         Item::factory()->create([

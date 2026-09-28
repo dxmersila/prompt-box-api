@@ -37,6 +37,14 @@ class ItemIndexRequest extends FormRequest
                 'string',
             ],
 
+            'access_type' => [
+                'nullable',
+                Rule::in([
+                    'free',
+                    'paid',
+                ]),
+            ],
+
             'sort' => [
                 'nullable',
                 Rule::in([

@@ -17,6 +17,17 @@ class ItemQueryValidationTest extends TestCase
             ]);
     }
 
+    public function test_invalid_access_type_returns_validation_error(): void
+    {
+        $response = $this->getJson('/api/v1/items?access_type=invalid');
+
+        $response
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'access_type',
+            ]);
+    }
+
     public function test_search_cannot_exceed_max_length(): void
     {
         $search = str_repeat('a', 101);
