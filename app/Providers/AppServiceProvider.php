@@ -48,11 +48,11 @@ class AppServiceProvider extends ServiceProvider
                 $query
             );
 
-            $query['id'] = $notifiable->getKey();
-
             return rtrim(config('app.web_app_url'), '/')
                 . '/verify-email?'
-                . http_build_query($query, '', '&', PHP_QUERY_RFC3986);
+                . http_build_query($query, '', '&', PHP_QUERY_RFC3986)
+                . '#id='
+                . rawurlencode((string) $notifiable->getKey());
         });
 
         ResetPassword::createUrlUsing(function ($notifiable, string $token): string {

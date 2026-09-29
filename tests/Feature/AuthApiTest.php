@@ -174,8 +174,13 @@ class AuthApiTest extends TestCase
 
                 parse_str($parts['query'] ?? '', $query);
 
+                parse_str(
+                    ltrim($parts['fragment'] ?? '', '#'),
+                    $fragment
+                );
+
                 return ($parts['path'] ?? '') === '/verify-email'
-                    && ($query['id'] ?? null) === (string) $user->id
+                    && ($fragment['id'] ?? null) === (string) $user->id
                     && ($query['hash'] ?? null) === sha1($user->email)
                     && isset($query['expires'])
                     && isset($query['signature']);
