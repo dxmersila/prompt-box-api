@@ -24,10 +24,44 @@ jobs:
       - name: Verify production dependencies
         run: composer check-platform-reqs --no-dev
 
+      - name: Prepare production artifact
+        run: |
+          rm -rf build
+          mkdir -p build
+
+          rsync -a \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='.env' \
+            --exclude='tests/' \
+            --exclude='docker/' \
+            --exclude='docker-compose.yml' \
+            --exclude='.phpunit.result.cache' \
+            --exclude='build/' \
+            ./ build/
+
+          mkdir -p build/storage/framework/cache
+          mkdir -p build/storage/framework/sessions
+          mkdir -p build/storage/framework/views
+          mkdir -p build/storage/logs
+
+          cd build
+          zip -qr ../prompt-box-api-production.zip .
+
+      - name: Upload production artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: prompt-box-api-production
+          path: prompt-box-api-production.zip
+          if-no-files-found: error
+
       - name: Test FTPS connection
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
-          curl --fail --silent --show-error             --ftp-ssl-reqd             --user "$FTP_USERNAME:$FTP_PASSWORD"             "ftp://$FTP_SERVER/"
+          curl --fail --silent --show-error \
+            --ftp-ssl-reqd \
+            --user "$FTP_USERNAME:$FTP_PASSWORD" \
+            "ftp://$FTP_SERVER/"
