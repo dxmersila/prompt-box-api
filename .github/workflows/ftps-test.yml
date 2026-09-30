@@ -1,0 +1,30 @@
+name: FTPS Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create test files
+        run: |
+          rm -rf ftps-test
+          mkdir -p ftps-test
+          echo "FTPS connection test" > ftps-test/test.txt
+          echo "Prompt Box FTPS test" > ftps-test/test-2.txt
+
+      - name: Upload test files via FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: ./ftps-test/
+          server-dir: ./ftps-test/
+          dangerous-clean-slate: false
+          exclude: |
+            **/.ftp-deploy-sync-state.json
