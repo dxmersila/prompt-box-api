@@ -1,0 +1,91 @@
+name: Build Production Artifact
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, xml, ctype, fileinfo, pdo, pdo_mysql
+          coverage: none
+
+      - name: Install production dependencies
+        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Verify production dependencies
+        run: composer check-platform-reqs --no-dev
+
+      - name: Prepare production artifact
+        run: |
+          rm -rf build prompt-box-api-production.zip
+          mkdir -p build
+
+          rsync -a \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='.env' \
+            --exclude='tests/' \
+            --exclude='docker/' \
+            --exclude='docker-compose.yml' \
+            --exclude='.phpunit.result.cache' \
+            --exclude='build/' \
+            --exclude='package.json' \
+            --exclude='vite.config.js' \
+            --exclude='resources/' \
+            ./ build/
+
+          mkdir -p \
+            build/storage/framework/cache \
+            build/storage/framework/sessions \
+            build/storage/framework/views \
+            build/storage/logs
+
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile, ZIP_DEFLATED
+
+          source = Path("build")
+          output = Path("prompt-box-api-production.zip")
+
+          with ZipFile(output, "w", ZIP_DEFLATED) as zf:
+              for path in source.rglob("*"):
+                  if path.is_file():
+                      zf.write(path, path.relative_to(source))
+          PY
+
+      - name: Verify artifact contents
+        run: |
+          test ! -e build/.env
+          test ! -e build/package.json
+          test ! -e build/vite.config.js
+          test ! -d build/resources
+          test -f build/artisan
+          test -d build/vendor
+          test -f build/public/index.php
+          test -f build/public/.htaccess
+
+          printf '%s\n' '--- FILE COUNT ---'
+          find build -type f | wc -l
+
+          printf '%s\n' '--- BUILD SIZE ---'
+          du -sh build
+
+          printf '%s\n' '--- ZIP SIZE ---'
+          du -h prompt-box-api-production.zip
+
+      - name: Upload production artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: prompt-box-api-production
+          path: prompt-box-api-production.zip
+          if-no-files-found: error
+          retention-days: 7
