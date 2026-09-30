@@ -30,9 +30,7 @@ jobs:
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Prepare application
-        run: |
-          cp .env.example .env
-          php artisan key:generate
+        run: echo "APP_KEY=$(php artisan key:generate --show)" >> "$GITHUB_ENV"
 
       - name: Run tests
         run: composer test
