@@ -40,7 +40,7 @@ jobs:
             --exclude='build/' \
             --exclude='package.json' \
             --exclude='vite.config.js' \
-            --exclude='resources/' \
+            --exclude='/resources/' \
             ./ build/
 
           mkdir -p \
@@ -72,6 +72,7 @@ jobs:
           test -d build/vendor
           test -f build/public/index.php
           test -f build/public/.htaccess
+          test -f build/vendor/laravel/framework/src/Illuminate/Console/resources/views/components/line.php
 
           printf '%s\n' '--- FILE COUNT ---'
           find build -type f | wc -l
