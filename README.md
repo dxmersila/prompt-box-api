@@ -152,9 +152,9 @@ The repository also contains the Armin foundation documentation under:
 Armin Documentation/
 ```
 
-Those documents describe the reusable architecture and boundaries inherited from the Armin Template.
+These documents describe the reusable Armin architecture, capabilities, and boundaries inherited by Prompt Box.
 
-Prompt Box-specific product decisions and configuration belong to this repository and its product documentation.
+Prompt Box-specific product decisions, configuration, content, and deployment details belong to this product repository and its product-specific documentation.
 
 ## Status
 
