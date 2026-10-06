@@ -62,9 +62,9 @@ The relationship is:
 
 > **Armin is the foundation. Products are the instances built on that foundation.**
 
-The first planned real product instance is **Prompt Box**.
+The first real product instance is **Prompt Box**.
 
-Prompt Box is not part of the Armin Template itself. It is the first product that will be created from the template.
+Prompt Box is not part of the Armin Template itself. It is the first product built from the template.
 
 ---
 
@@ -366,7 +366,7 @@ All three applications are complete and stable at the intended Template scope.
 | Next.js Web        | Complete / Stable |
 | Armin Template     | Complete / Stable |
 
-The projects are synchronized with their GitHub repositories and there are no currently known blockers in the Template itself.
+There are no currently known blockers within the intended Template scope.
 
 This status means the Template development phase is complete.
 
@@ -415,7 +415,7 @@ It should not be embedded into the reusable Template.
 
 ## 13. Prompt Box
 
-Prompt Box is the first planned product instance built from Armin.
+Prompt Box is the first real product instance built from Armin.
 
 Its relationship to Armin is:
 

@@ -243,7 +243,7 @@ Product Instance
    └── Production credentials
 ```
 
-The first planned product instance is **Prompt Box**.
+The first real product instance built on Armin is **Prompt Box**.
 
 Prompt Box-specific work belongs to the product instance, not to the generic Armin Template.
 

@@ -106,7 +106,6 @@ Hidden items are excluded from public discovery.
 The API supports:
 
 * Public category listing
-* Category item listing
 * Administrative listing
 * Search
 * Sorting
@@ -590,7 +589,7 @@ The following are intentionally **not** standalone modules in the current Templa
 * Advanced permission management
 * Subscription tier management
 
-Their absence is intentional and reflects the current product scope.
+Their absence is intentional and reflects the current Template scope.
 
 ---
 

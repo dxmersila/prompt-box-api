@@ -1,58 +1,128 @@
-# Armin — Current Session
+# Prompt Box — Current Session
 
 ## Current Status
 
-| Component      | Status            |
-| -------------- | ----------------- |
-| Armin Template | Complete / Stable |
-| Laravel API    | Complete / Stable |
-| React Admin    | Complete / Stable |
-| Next.js Web    | Complete / Stable |
-| GitHub         | Synchronized      |
-| Known Blockers | None              |
+| Area                         | Status                                  |
+| ---------------------------- | --------------------------------------- |
+| Prompt Box                   | Production / Online                     |
+| API                          | Production / Online                     |
+| API Base                     | `https://api.promptbox.casfa.ir/api/v1` |
+| Documentation                | Refresh in progress                     |
+| Current Documentation Branch | `docs/refresh-prompt-box-documentation` |
 
-## Current Lifecycle
+## Product Context
 
-The Armin Template development phase is complete.
+Prompt Box is the first real product instance built from the reusable Armin foundation.
 
-The project has moved from **template development** to **product instance productionization**.
+Armin provides the reusable architecture and generic backend foundation. Prompt Box owns its own product-specific implementation, content, branding, domains, deployment configuration, and production configuration.
+
+## API State
+
+The Prompt Box API is implemented as a Laravel API-first backend under:
 
 ```text
-Armin Template
-      ↓
-Clone / Create Product Instance
-      ↓
-Production Configuration
-      ↓
-Product-Specific Development
-      ↓
-Launch
+~/projects/prompt-box-api
 ```
 
-## Immediate Next Step
+The current `/api/v1` implementation exposes **48 routes**.
 
-Obtain and configure the real **ZarinPal production credentials** for the first product instance.
+The API is deployed and online at:
 
-Production credentials must be configured at the product-instance level and must never be committed to the reusable template repository.
+```text
+https://api.promptbox.casfa.ir/api/v1
+```
 
-## First Product Instance
+The production API uses the standard Laravel `public` document root.
 
-The first real product built on Armin is **Prompt Box**.
+## Development / Seed State
 
-Prompt Box-specific work belongs to the product instance, including:
+The repository includes development/demo seed data for the Prompt Box domain.
 
-* Branding
-* Product copy
-* Content
-* Catalog data
-* Domain
-* Production configuration
-* Production payment credentials
+Current seeded development data includes:
 
-These are not part of the Armin Template itself.
+* 2 users
+* 8 categories
+* 12 tags
+* 32 items
+* 32 files
+* 32 media records
+* 3 active subscription plans
+* 0 orders
+* 0 subscriptions
+
+Each seeded item has one associated File and one associated Media record.
+
+Seed data is development/demo data and should not be treated as production business data.
+
+## Current Repository State
+
+The documentation refresh is being performed on a dedicated branch:
+
+```text
+docs/refresh-prompt-box-documentation
+```
+
+The branch was created from the clean `main` branch at:
+
+```text
+bdcf88f fix: make default item ordering deterministic
+```
+
+The documentation audit is limited to the files under:
+
+```text
+Armin Documentation/
+```
+
+No application code, routes, tests, database schema, configuration, or deployment implementation should be changed as part of this documentation batch.
+
+## Documentation Scope
+
+The current documentation refresh covers:
+
+```text
+Armin Documentation/README.md
+Armin Documentation/ARMIN.md
+Armin Documentation/ARCHITECTURE.md
+Armin Documentation/FEATURES.md
+Armin Documentation/API Contract.md
+Armin Documentation/SESSION.md
+```
+
+Documentation must describe the actual current implementation and must not document planned or nonexistent routes and features as if they already exist.
 
 ## Working Rule
 
+Use the established development workflow:
+
+```text
+Inspect
+  ↓
+Decide
+  ↓
+Change
+  ↓
+Validate
+  ↓
+Browser / API Test
+  ↓
+Commit
+```
+
+Do not assume a command succeeded without checking its output.
+
+Do not make unrelated refactors, speculative abstractions, or implementation changes while performing documentation work.
+
+## Architecture Rule
+
 Armin remains the reusable foundation.
 
-Future changes to the Template should be driven by a real, recurring requirement that benefits multiple product instances—not by speculative features or premature abstraction.
+Changes that are genuinely shared and reusable across product instances should be implemented in the Armin Template first, validated and committed there, and then transferred to the relevant product instance and committed separately.
+
+Prompt Box-specific requirements remain within the Prompt Box repositories.
+
+## Next Step
+
+Complete the documentation audit and validate the final documentation diff.
+
+After the documentation commit, return to the actual Prompt Box development, production, and deployment backlog. Documentation work must not be used as a reason to modify unrelated application behavior.

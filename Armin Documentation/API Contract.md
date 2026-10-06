@@ -172,6 +172,48 @@ Requires authentication.
 
 ---
 
+## 8.5 Email Verification Notification
+
+```http
+POST /api/v1/auth/email/verification-notification
+```
+
+Sends an email verification notification for the authenticated user.
+
+Requires authentication.
+
+---
+
+## 8.6 Verify Email
+
+```http
+GET /api/v1/auth/email/verify/{id}
+```
+
+Verifies the user's email address through the API's email verification flow.
+
+---
+
+## 8.7 Forgot Password
+
+```http
+POST /api/v1/auth/password/forgot
+```
+
+Initiates the password reset flow for a user account.
+
+---
+
+## 8.8 Reset Password
+
+```http
+POST /api/v1/auth/password/reset
+```
+
+Completes the password reset flow using the provided reset data.
+
+---
+
 # 9. Categories
 
 ## 9.1 List Categories
@@ -181,18 +223,6 @@ GET /api/v1/categories
 ```
 
 Returns public categories.
-
----
-
-## 9.2 Category Items
-
-```http
-GET /api/v1/categories/{category}/items
-```
-
-Returns public items belonging to the specified category.
-
-Only items eligible for public discovery are returned.
 
 ---
 
@@ -261,6 +291,18 @@ Returns protected item content when the authenticated user is authorized to acce
 Requires authentication and backend access authorization.
 
 The client must not determine access independently.
+
+---
+
+## 10.5 User Library
+
+```http
+GET /api/v1/library
+```
+
+Returns the authenticated user's accessible library according to the current backend access rules.
+
+Requires authentication.
 
 ---
 
@@ -337,6 +379,18 @@ GET /api/v1/orders/{order}
 ```
 
 Returns an order belonging to the authenticated user.
+
+Ownership is enforced by the API.
+
+---
+
+## 12.4 Delete Order
+
+```http
+DELETE /api/v1/orders/{order}
+```
+
+Deletes an order belonging to the authenticated user according to the backend order rules.
 
 Ownership is enforced by the API.
 
@@ -650,14 +704,37 @@ Deletes an Item according to the backend integrity rules.
 
 Media management is scoped to Items.
 
-The current API supports workflows for:
+## 23.1 Upload Media
 
-* Uploading media
-* Setting primary media
-* Ordering media
-* Deleting media
+```http
+POST /api/v1/admin/items/{item}/media
+```
 
-The exact route structure should be treated as part of the implementation contract and kept synchronized with the API route definitions.
+Uploads media for the specified Item.
+
+---
+
+## 23.2 Delete Media
+
+```http
+DELETE /api/v1/admin/items/{item}/media/{media}
+```
+
+Deletes the specified media from the Item.
+
+---
+
+## 23.3 Set Primary Media
+
+```http
+PATCH /api/v1/admin/items/{item}/media/{media}/primary
+```
+
+Sets the specified media as the primary media for the Item.
+
+---
+
+Media ordering is part of the Item media workflow and remains subject to the current implementation contract.
 
 ---
 
