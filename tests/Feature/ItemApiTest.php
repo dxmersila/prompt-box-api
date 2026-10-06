@@ -133,6 +133,52 @@ class ItemApiTest extends TestCase
             ->assertJsonPath('data.0.title', 'New Item');
     }
 
+    public function test_items_endpoint_defaults_to_latest_order(): void
+    {
+        $older = Item::factory()->create([
+            'title' => 'Older Item',
+            'is_visible' => true,
+            'created_at' => now()->subDay(),
+        ]);
+
+        $newer = Item::factory()->create([
+            'title' => 'Newer Item',
+            'is_visible' => true,
+            'created_at' => now(),
+        ]);
+
+        $response = $this->getJson('/api/v1/items');
+
+        $response
+            ->assertOk()
+            ->assertJsonPath('data.0.id', $newer->id)
+            ->assertJsonPath('data.1.id', $older->id);
+    }
+
+    public function test_items_endpoint_default_order_is_deterministic_when_created_at_matches(): void
+    {
+        $createdAt = now();
+
+        $first = Item::factory()->create([
+            'title' => 'First Item',
+            'is_visible' => true,
+            'created_at' => $createdAt,
+        ]);
+
+        $second = Item::factory()->create([
+            'title' => 'Second Item',
+            'is_visible' => true,
+            'created_at' => $createdAt,
+        ]);
+
+        $response = $this->getJson('/api/v1/items');
+
+        $response
+            ->assertOk()
+            ->assertJsonPath('data.0.id', $second->id)
+            ->assertJsonPath('data.1.id', $first->id);
+    }
+
     public function test_items_endpoint_does_not_expose_item_content(): void
     {
         Item::factory()->create([

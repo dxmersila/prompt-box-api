@@ -70,6 +70,12 @@ class ItemController extends Controller
             };
         }
 
+        if (!$request->filled('sort')) {
+            $query
+                ->orderByDesc('created_at')
+                ->orderByDesc('id');
+        }
+
         $items = $query->paginate(12);
 
         return ItemResource::collection($items);
