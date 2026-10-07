@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Api\V1\Admin\SubscriptionPlanController;
 use App\Http\Controllers\Api\V1\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\AnalyticsEventController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ItemController;
 use App\Http\Controllers\Api\V1\LibraryController;
@@ -65,6 +66,12 @@ Route::prefix('v1')->group(function () {
         '/subscription-plans',
         [PublicSubscriptionPlanController::class, 'index']
     );
+
+    // Analytics
+    Route::post(
+        '/analytics/events',
+        [AnalyticsEventController::class, 'store']
+    )->middleware('throttle:analytics-events');
 
     // Payment Callback
     Route::get(

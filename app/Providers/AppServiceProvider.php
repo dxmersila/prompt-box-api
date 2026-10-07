@@ -33,6 +33,10 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
+        RateLimiter::for('analytics-events', function ($request) {
+            return Limit::perMinute(60)->by($request->ip());
+        });
+
         VerifyEmail::createUrlUsing(function ($notifiable): string {
             $verificationUrl = URL::temporarySignedRoute(
                 'verification.verify',
