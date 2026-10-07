@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\AnalyticsEvent;
 use App\Models\Access;
 use App\Models\Item;
 use App\Models\User;
@@ -234,4 +235,110 @@ class ItemContentTest extends TestCase
 
         $response->assertForbidden();
     }
+
+    public function test_authenticated_user_content_access_records_prompt_access(): void
+    {
+        $user = User::factory()->create();
+        $item = Item::factory()->create([
+            'access_type' => 'free',
+        ]);
+
+        $this
+            ->actingAs($user, 'sanctum')
+            ->postJson("/api/v1/items/{$item->slug}/access")
+            ->assertOk();
+
+        $visitorId = '11111111-1111-4111-8111-111111111111';
+        $sessionId = '22222222-2222-4222-8222-222222222222';
+
+        $this->actingAs($user, 'sanctum')
+            ->withHeaders([
+                'X-Analytics-Visitor-Id' => $visitorId,
+                'X-Analytics-Session-Id' => $sessionId,
+            ])
+            ->getJson("/api/v1/items/{$item->slug}/content")
+            ->assertOk()
+            ->assertJson([
+                'content' => $item->content,
+            ]);
+
+        $this->assertDatabaseHas('analytics_events', [
+            'event' => AnalyticsEvent::EVENT_PROMPT_ACCESS,
+            'visitor_id' => $visitorId,
+            'session_id' => $sessionId,
+            'user_id' => $user->id,
+            'item_id' => $item->id,
+        ]);
+    }
+
+    public function test_authenticated_user_content_access_works_without_analytics_headers(): void
+    {
+        $user = User::factory()->create();
+        $item = Item::factory()->create([
+            'access_type' => 'free',
+        ]);
+
+        $this
+            ->actingAs($user, 'sanctum')
+            ->postJson("/api/v1/items/{$item->slug}/access")
+            ->assertOk();
+
+        $this->actingAs($user, 'sanctum')
+            ->getJson("/api/v1/items/{$item->slug}/content")
+            ->assertOk()
+            ->assertJson([
+                'content' => $item->content,
+            ]);
+
+        $this->assertDatabaseCount('analytics_events', 0);
+    }
+
+    public function test_authenticated_user_content_access_works_with_invalid_analytics_headers(): void
+    {
+        $user = User::factory()->create();
+        $item = Item::factory()->create([
+            'access_type' => 'free',
+        ]);
+
+        $this
+            ->actingAs($user, 'sanctum')
+            ->postJson("/api/v1/items/{$item->slug}/access")
+            ->assertOk();
+
+        $this->actingAs($user, 'sanctum')
+            ->withHeaders([
+                'X-Analytics-Visitor-Id' => 'invalid-visitor-id',
+                'X-Analytics-Session-Id' => 'invalid-session-id',
+            ])
+            ->getJson("/api/v1/items/{$item->slug}/content")
+            ->assertOk()
+            ->assertJson([
+                'content' => $item->content,
+            ]);
+
+        $this->assertDatabaseCount('analytics_events', 0);
+    }
+
+    public function test_unauthorized_content_access_does_not_record_prompt_access(): void
+    {
+        $user = User::factory()->create();
+        $item = Item::factory()->create([
+            'is_visible' => true,
+            'access_type' => 'paid',
+        ]);
+
+        $visitorId = '33333333-3333-4333-8333-333333333333';
+        $sessionId = '44444444-4444-4444-8444-444444444444';
+
+        $this->actingAs($user, 'sanctum')
+            ->withHeaders([
+                'X-Analytics-Visitor-Id' => $visitorId,
+                'X-Analytics-Session-Id' => $sessionId,
+            ])
+            ->getJson("/api/v1/items/{$item->slug}/content")
+            ->assertForbidden();
+
+        $this->assertDatabaseCount('analytics_events', 0);
+    }
+
 }
