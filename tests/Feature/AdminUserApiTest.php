@@ -72,6 +72,8 @@ class AdminUserApiTest extends TestCase
     {
         $admin = User::factory()->create([
             'role' => 'admin',
+            'name' => 'System Admin',
+            'email' => 'admin@example.com',
         ]);
 
         $nameMatch = User::factory()->create([
