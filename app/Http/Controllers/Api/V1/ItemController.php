@@ -167,6 +167,7 @@ class ItemController extends Controller
 
         return response()->json([
             'content' => $item->content,
+            'item_id' => $item->id,
         ]);
     }
 }

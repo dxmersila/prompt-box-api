@@ -260,6 +260,7 @@ class ItemContentTest extends TestCase
             ->assertOk()
             ->assertJson([
                 'content' => $item->content,
+                'item_id' => $item->id,
             ]);
 
         $this->assertDatabaseHas('analytics_events', [
