@@ -20,7 +20,7 @@ class AnalyticsEventRequest extends FormRequest
                 'required',
                 Rule::in([
                     AnalyticsEvent::EVENT_VISIT,
-                    AnalyticsEvent::EVENT_PROMPT_COPY,
+                    AnalyticsEvent::EVENT_ITEM_COPY,
                 ]),
             ],
 
@@ -35,7 +35,7 @@ class AnalyticsEventRequest extends FormRequest
             ],
 
             'item_id' => [
-                'required_if:event,' . AnalyticsEvent::EVENT_PROMPT_COPY,
+                'required_if:event,' . AnalyticsEvent::EVENT_ITEM_COPY,
                 'prohibited_if:event,' . AnalyticsEvent::EVENT_VISIT,
                 'integer',
                 'exists:items,id',

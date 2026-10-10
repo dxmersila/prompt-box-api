@@ -8,9 +8,9 @@ class AnalyticsEvent extends Model
 {
     public const EVENT_VISIT = 'visit';
 
-    public const EVENT_PROMPT_ACCESS = 'prompt_access';
+    public const EVENT_ITEM_ACCESS = 'item_access';
 
-    public const EVENT_PROMPT_COPY = 'prompt_copy';
+    public const EVENT_ITEM_COPY = 'item_copy';
 
     public $timestamps = false;
 

@@ -27,7 +27,7 @@ class AnalyticsEventController extends Controller
         } else {
             $item = Item::query()->findOrFail($request->integer('item_id'));
 
-            $analyticsEventService->recordPromptCopy(
+            $analyticsEventService->recordItemCopy(
                 $request->string('visitor_id')->toString(),
                 $request->string('session_id')->toString(),
                 $item,

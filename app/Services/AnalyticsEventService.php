@@ -30,14 +30,14 @@ class AnalyticsEventService
         ]);
     }
 
-    public function recordPromptAccess(
+    public function recordItemAccess(
         string $visitorId,
         string $sessionId,
         Item $item,
         ?User $user = null
     ): void {
         $this->record(
-            AnalyticsEvent::EVENT_PROMPT_ACCESS,
+            AnalyticsEvent::EVENT_ITEM_ACCESS,
             $visitorId,
             $sessionId,
             $user,
@@ -45,14 +45,14 @@ class AnalyticsEventService
         );
     }
 
-    public function recordPromptCopy(
+    public function recordItemCopy(
         string $visitorId,
         string $sessionId,
         Item $item,
         ?User $user = null
     ): void {
         $this->record(
-            AnalyticsEvent::EVENT_PROMPT_COPY,
+            AnalyticsEvent::EVENT_ITEM_COPY,
             $visitorId,
             $sessionId,
             $user,

@@ -41,20 +41,20 @@ class DashboardController extends Controller
                 [AnalyticsEvent::EVENT_VISIT]
             )
             ->selectRaw(
-                'COUNT(CASE WHEN event = ? THEN 1 END) as prompt_access',
-                [AnalyticsEvent::EVENT_PROMPT_ACCESS]
+                'COUNT(CASE WHEN event = ? THEN 1 END) as item_access',
+                [AnalyticsEvent::EVENT_ITEM_ACCESS]
             )
             ->selectRaw(
-                'COUNT(CASE WHEN event = ? THEN 1 END) as prompt_copies',
-                [AnalyticsEvent::EVENT_PROMPT_COPY]
+                'COUNT(CASE WHEN event = ? THEN 1 END) as item_copies',
+                [AnalyticsEvent::EVENT_ITEM_COPY]
             )
             ->first();
 
         return [
             'visits' => (int) $events->visits,
             'unique_visitors' => (int) $events->unique_visitors,
-            'prompt_access' => (int) $events->prompt_access,
-            'prompt_copies' => (int) $events->prompt_copies,
+            'item_access' => (int) $events->item_access,
+            'item_copies' => (int) $events->item_copies,
         ];
     }
 }

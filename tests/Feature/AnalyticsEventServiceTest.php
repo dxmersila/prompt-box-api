@@ -75,12 +75,12 @@ class AnalyticsEventServiceTest extends TestCase
         ]);
     }
 
-    public function test_it_records_prompt_access(): void
+    public function test_it_records_item_access(): void
     {
         $user = User::factory()->create();
         $item = Item::factory()->create();
 
-        app(AnalyticsEventService::class)->recordPromptAccess(
+        app(AnalyticsEventService::class)->recordItemAccess(
             'visitor-123',
             'session-123',
             $item,
@@ -88,7 +88,7 @@ class AnalyticsEventServiceTest extends TestCase
         );
 
         $this->assertDatabaseHas('analytics_events', [
-            'event' => AnalyticsEvent::EVENT_PROMPT_ACCESS,
+            'event' => AnalyticsEvent::EVENT_ITEM_ACCESS,
             'visitor_id' => 'visitor-123',
             'session_id' => 'session-123',
             'user_id' => $user->id,
@@ -96,12 +96,12 @@ class AnalyticsEventServiceTest extends TestCase
         ]);
     }
 
-    public function test_it_records_prompt_copy(): void
+    public function test_it_records_item_copy(): void
     {
         $user = User::factory()->create();
         $item = Item::factory()->create();
 
-        app(AnalyticsEventService::class)->recordPromptCopy(
+        app(AnalyticsEventService::class)->recordItemCopy(
             'visitor-123',
             'session-123',
             $item,
@@ -109,7 +109,7 @@ class AnalyticsEventServiceTest extends TestCase
         );
 
         $this->assertDatabaseHas('analytics_events', [
-            'event' => AnalyticsEvent::EVENT_PROMPT_COPY,
+            'event' => AnalyticsEvent::EVENT_ITEM_COPY,
             'visitor_id' => 'visitor-123',
             'session_id' => 'session-123',
             'user_id' => $user->id,

@@ -54,12 +54,12 @@ class AnalyticsEventApiTest extends TestCase
         );
     }
 
-    public function test_guest_can_record_prompt_copy(): void
+    public function test_guest_can_record_item_copy(): void
     {
         $item = Item::factory()->create();
 
         $response = $this->postJson('/api/v1/analytics/events', [
-            'event' => AnalyticsEvent::EVENT_PROMPT_COPY,
+            'event' => AnalyticsEvent::EVENT_ITEM_COPY,
             'visitor_id' => '550e8400-e29b-41d4-a716-446655440000',
             'session_id' => '550e8400-e29b-41d4-a716-446655440001',
             'item_id' => $item->id,
@@ -68,7 +68,7 @@ class AnalyticsEventApiTest extends TestCase
         $response->assertNoContent();
 
         $this->assertDatabaseHas('analytics_events', [
-            'event' => AnalyticsEvent::EVENT_PROMPT_COPY,
+            'event' => AnalyticsEvent::EVENT_ITEM_COPY,
             'visitor_id' => '550e8400-e29b-41d4-a716-446655440000',
             'session_id' => '550e8400-e29b-41d4-a716-446655440001',
             'user_id' => null,
@@ -76,14 +76,14 @@ class AnalyticsEventApiTest extends TestCase
         ]);
     }
 
-    public function test_authenticated_user_is_attached_to_prompt_copy(): void
+    public function test_authenticated_user_is_attached_to_item_copy(): void
     {
         $user = User::factory()->create();
         $item = Item::factory()->create();
 
         $response = $this->actingAs($user, 'sanctum')
             ->postJson('/api/v1/analytics/events', [
-                'event' => AnalyticsEvent::EVENT_PROMPT_COPY,
+                'event' => AnalyticsEvent::EVENT_ITEM_COPY,
                 'visitor_id' => '550e8400-e29b-41d4-a716-446655440000',
                 'session_id' => '550e8400-e29b-41d4-a716-446655440001',
                 'item_id' => $item->id,
@@ -92,7 +92,7 @@ class AnalyticsEventApiTest extends TestCase
         $response->assertNoContent();
 
         $this->assertDatabaseHas('analytics_events', [
-            'event' => AnalyticsEvent::EVENT_PROMPT_COPY,
+            'event' => AnalyticsEvent::EVENT_ITEM_COPY,
             'visitor_id' => '550e8400-e29b-41d4-a716-446655440000',
             'session_id' => '550e8400-e29b-41d4-a716-446655440001',
             'user_id' => $user->id,
@@ -126,10 +126,10 @@ class AnalyticsEventApiTest extends TestCase
         $this->assertDatabaseCount('analytics_events', 60);
     }
 
-    public function test_prompt_access_event_is_rejected(): void
+    public function test_item_access_event_is_rejected(): void
     {
         $response = $this->postJson('/api/v1/analytics/events', [
-            'event' => AnalyticsEvent::EVENT_PROMPT_ACCESS,
+            'event' => AnalyticsEvent::EVENT_ITEM_ACCESS,
             'visitor_id' => '550e8400-e29b-41d4-a716-446655440000',
             'session_id' => '550e8400-e29b-41d4-a716-446655440001',
         ]);
@@ -155,10 +155,10 @@ class AnalyticsEventApiTest extends TestCase
         $this->assertDatabaseCount('analytics_events', 0);
     }
 
-    public function test_prompt_copy_requires_item_id(): void
+    public function test_item_copy_requires_item_id(): void
     {
         $response = $this->postJson('/api/v1/analytics/events', [
-            'event' => AnalyticsEvent::EVENT_PROMPT_COPY,
+            'event' => AnalyticsEvent::EVENT_ITEM_COPY,
             'visitor_id' => '550e8400-e29b-41d4-a716-446655440000',
             'session_id' => '550e8400-e29b-41d4-a716-446655440001',
         ]);
@@ -197,7 +197,7 @@ class AnalyticsEventApiTest extends TestCase
     public function test_nonexistent_item_id_is_rejected(): void
     {
         $response = $this->postJson('/api/v1/analytics/events', [
-            'event' => AnalyticsEvent::EVENT_PROMPT_COPY,
+            'event' => AnalyticsEvent::EVENT_ITEM_COPY,
             'visitor_id' => '550e8400-e29b-41d4-a716-446655440000',
             'session_id' => '550e8400-e29b-41d4-a716-446655440001',
             'item_id' => 999999,

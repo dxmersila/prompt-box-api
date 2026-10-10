@@ -236,7 +236,7 @@ class ItemContentTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_authenticated_user_content_access_records_prompt_access(): void
+    public function test_authenticated_user_content_access_records_item_access(): void
     {
         $user = User::factory()->create();
         $item = Item::factory()->create([
@@ -264,7 +264,7 @@ class ItemContentTest extends TestCase
             ]);
 
         $this->assertDatabaseHas('analytics_events', [
-            'event' => AnalyticsEvent::EVENT_PROMPT_ACCESS,
+            'event' => AnalyticsEvent::EVENT_ITEM_ACCESS,
             'visitor_id' => $visitorId,
             'session_id' => $sessionId,
             'user_id' => $user->id,
@@ -320,7 +320,7 @@ class ItemContentTest extends TestCase
         $this->assertDatabaseCount('analytics_events', 0);
     }
 
-    public function test_unauthorized_content_access_does_not_record_prompt_access(): void
+    public function test_unauthorized_content_access_does_not_record_item_access(): void
     {
         $user = User::factory()->create();
         $item = Item::factory()->create([

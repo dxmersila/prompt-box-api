@@ -157,7 +157,7 @@ class ItemController extends Controller
             && Str::isUuid($visitorId)
             && Str::isUuid($sessionId)
         ) {
-            $analyticsEventService->recordPromptAccess(
+            $analyticsEventService->recordItemAccess(
                 $visitorId,
                 $sessionId,
                 $item,

@@ -81,7 +81,7 @@ class AdminDashboardTest extends TestCase
         ]);
 
         AnalyticsEvent::create([
-            'event' => AnalyticsEvent::EVENT_PROMPT_ACCESS,
+            'event' => AnalyticsEvent::EVENT_ITEM_ACCESS,
             'visitor_id' => $visitorB,
             'session_id' => 'cccccccc-cccc-4ccc-8ccc-cccccccccccc',
             'user_id' => $admin->id,
@@ -89,7 +89,7 @@ class AdminDashboardTest extends TestCase
         ]);
 
         AnalyticsEvent::create([
-            'event' => AnalyticsEvent::EVENT_PROMPT_COPY,
+            'event' => AnalyticsEvent::EVENT_ITEM_COPY,
             'visitor_id' => $visitorB,
             'session_id' => 'cccccccc-cccc-4ccc-8ccc-cccccccccccc',
             'user_id' => $admin->id,
@@ -104,7 +104,7 @@ class AdminDashboardTest extends TestCase
         ]);
 
         AnalyticsEvent::create([
-            'event' => AnalyticsEvent::EVENT_PROMPT_ACCESS,
+            'event' => AnalyticsEvent::EVENT_ITEM_ACCESS,
             'visitor_id' => $visitorB,
             'session_id' => 'dddddddd-dddd-4ddd-8ddd-dddddddddddd',
             'user_id' => $admin->id,
@@ -119,7 +119,7 @@ class AdminDashboardTest extends TestCase
         ]);
 
         AnalyticsEvent::create([
-            'event' => AnalyticsEvent::EVENT_PROMPT_COPY,
+            'event' => AnalyticsEvent::EVENT_ITEM_COPY,
             'visitor_id' => $visitorC,
             'session_id' => 'eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee',
             'user_id' => $admin->id,
@@ -134,7 +134,7 @@ class AdminDashboardTest extends TestCase
         ]);
 
         AnalyticsEvent::create([
-            'event' => AnalyticsEvent::EVENT_PROMPT_ACCESS,
+            'event' => AnalyticsEvent::EVENT_ITEM_ACCESS,
             'visitor_id' => $visitorD,
             'session_id' => 'ffffffff-ffff-4fff-8fff-ffffffffffff',
             'user_id' => $admin->id,
@@ -155,26 +155,26 @@ class AdminDashboardTest extends TestCase
                     'today' => [
                         'visits' => 2,
                         'unique_visitors' => 1,
-                        'prompt_access' => 1,
-                        'prompt_copies' => 1,
+                        'item_access' => 1,
+                        'item_copies' => 1,
                     ],
                     'week' => [
                         'visits' => 3,
                         'unique_visitors' => 2,
-                        'prompt_access' => 2,
-                        'prompt_copies' => 1,
+                        'item_access' => 2,
+                        'item_copies' => 1,
                     ],
                     'month' => [
                         'visits' => 4,
                         'unique_visitors' => 3,
-                        'prompt_access' => 2,
-                        'prompt_copies' => 2,
+                        'item_access' => 2,
+                        'item_copies' => 2,
                     ],
                     'year' => [
                         'visits' => 5,
                         'unique_visitors' => 4,
-                        'prompt_access' => 3,
-                        'prompt_copies' => 2,
+                        'item_access' => 3,
+                        'item_copies' => 2,
                     ],
                 ],
             ]);
